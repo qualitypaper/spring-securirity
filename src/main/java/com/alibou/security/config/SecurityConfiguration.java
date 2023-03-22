@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,21 +30,30 @@ public class SecurityConfiguration {
         .csrf()
         .disable()
         .authorizeHttpRequests()
-        .requestMatchers("/api/v1/auth/**")
+        .requestMatchers("/auth/**")
           .permitAll()
         .anyRequest()
           .authenticated()
         .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .cors().and()
+            .oauth2ResourceServer().jwt().and().and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .logout()
-        .logoutUrl("/api/v1/auth/logout")
-        .addLogoutHandler(logoutHandler)
-        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-    ;
+//            .authenticationProvider(authenticationProvider)
+//            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .logout()
+            .logoutUrl("/api/v1/auth/logout")
+            .addLogoutHandler(logoutHandler)
+            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+            .and()
+//            .oauth2Login(oauth2 -> oauth2
+//                    .redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig.baseUri("/login/oauth2/code/google"))
+//                    .authorizationEndpoint(authorizationEndpointConfig -> authorizationEndpointConfig.baseUri("/login/oauth2/code/**"))
+//            )
+            .oauth2Login()
+            .and()
+            .httpBasic(Customizer.withDefaults());
 
     return http.build();
   }

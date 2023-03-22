@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/jwt_security
-    username: alibou
-    password: alibou
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: rbhbkkrhenjq
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,3 +13,18 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 364018326792-nq9vnmnqeub6troia0k99pm3gdil85os.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+rsa:
+  public-key: classpath:key/public.pem
+  private-key: classpath:key/private.pem
