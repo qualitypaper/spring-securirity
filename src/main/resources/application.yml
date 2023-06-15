@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: rbhbkkrhenjq
+    url: jdbc:postgresql://localhost:5432/co_tourism
+    username: qualitypaper
+    password: kolbasa84
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -14,13 +14,6 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 364018326792-nq9vnmnqeub6troia0k99pm3gdil85os.apps.googleusercontent.com
-            client-secret: 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
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
