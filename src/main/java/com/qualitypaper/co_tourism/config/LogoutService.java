@@ -1,6 +1,6 @@
 package com.qualitypaper.co_tourism.config;
 
-import com.qualitypaper.co_tourism.model.token.TokenRepository;
+import com.qualitypaper.co_tourism.repository.AuthenticationTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+  private final AuthenticationTokenRepository authenticationTokenRepository;
 
   @Override
   public void logout(
@@ -27,12 +27,12 @@ public class LogoutService implements LogoutHandler {
       return;
     }
     jwt = authHeader.substring(6).replace(" ", "");
-    var storedToken = tokenRepository.findByToken(jwt)
+    var storedToken = authenticationTokenRepository.findByToken(jwt)
         .orElse(null);
     if (storedToken != null) {
       storedToken.setExpired(true);
       storedToken.setRevoked(true);
-      tokenRepository.save(storedToken);
+      authenticationTokenRepository.save(storedToken);
       SecurityContextHolder.clearContext();
     }
   }

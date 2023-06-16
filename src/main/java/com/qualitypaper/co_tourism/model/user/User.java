@@ -1,13 +1,9 @@
 package com.qualitypaper.co_tourism.model.user;
 
-import com.qualitypaper.co_tourism.model.token.Token;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.qualitypaper.co_tourism.model.tokens.authenticationToken.AuthenticationToken;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +32,14 @@ public class User implements UserDetails {
   private Role role;
 
   @OneToMany(mappedBy = "user")
-  private List<Token> tokens;
+  private List<Review> reviews;
+
+  @OneToMany(mappedBy = "user")
+  private List<AuthenticationToken> authenticationTokens;
+  private LocalDateTime createdAt;
+  private boolean confirmed;
+  private boolean banned;
+  private LocalDateTime lastLogin;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,7 +63,7 @@ public class User implements UserDetails {
 
   @Override
   public boolean isAccountNonLocked() {
-    return true;
+    return !banned;
   }
 
   @Override
@@ -70,7 +73,7 @@ public class User implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return true;
+    return confirmed;
   }
 
 

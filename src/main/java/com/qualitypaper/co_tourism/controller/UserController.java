@@ -22,6 +22,6 @@ public class UserController {
 
     @GetMapping("/updateToken/{token}")
     public String updateToken(@PathVariable String token){
-        return userService.updateToken(token);
+        return userService.updateAuthenticationToken(token);
     }
 }
