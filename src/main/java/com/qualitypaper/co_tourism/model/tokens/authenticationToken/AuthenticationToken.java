@@ -32,6 +32,7 @@ public class AuthenticationToken {
 
   private boolean expired;
   private LocalDateTime created;
+  private LocalDateTime lastLogin;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

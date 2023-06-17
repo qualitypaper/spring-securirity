@@ -1,9 +1,11 @@
 package com.qualitypaper.co_tourism.service.email;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public interface EmailChecker {
 
-    default boolean isValid(String email){
-        if(email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) return true;
-        return false;
+    static boolean isValid(String email){
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
 }

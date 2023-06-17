@@ -1,5 +1,5 @@
 package com.qualitypaper.co_tourism.model.tokens;
 
 public enum TokenType {
-  BEARER, CONFIRMATION
+  BEARER, CONFIRMATION, FORGOT_PASSWORD
 }

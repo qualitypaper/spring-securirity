@@ -29,11 +29,10 @@ public class AuthenticationService {
     private final TokensService tokensService;
     private final UserMapperImplementation userMapperImplementation;
     private final EmailServiceImplementation emailServiceImplementation;
-    private final EmailChecker emailChecker;
 
 
     public AuthenticationResponse register(RegisterRequest request) {
-        if(!emailChecker.isValid(request.getEmail())) throw new EmailNotValidException("Email is not valid");
+        if(EmailChecker.isValid(request.getEmail())) throw new EmailNotValidException("Email is not valid");
         var user = mapUser(request);
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user, user.getId());
@@ -58,7 +57,6 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-
 
     private User mapUser(RegisterRequest request) {
         var user = userMapperImplementation.mapToUser(request);

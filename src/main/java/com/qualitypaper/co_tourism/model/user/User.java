@@ -31,7 +31,7 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany
   private List<Review> reviews;
 
   @OneToMany(mappedBy = "user")
@@ -39,7 +39,6 @@ public class User implements UserDetails {
   private LocalDateTime createdAt;
   private boolean confirmed;
   private boolean banned;
-  private LocalDateTime lastLogin;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

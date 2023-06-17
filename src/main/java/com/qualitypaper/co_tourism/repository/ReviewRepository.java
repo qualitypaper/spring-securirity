@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 
-    Review findReviewByUser(User user);
+    Review findAllByReviewTo(User user);
 }

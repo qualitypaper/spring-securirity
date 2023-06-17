@@ -3,13 +3,17 @@ package com.qualitypaper.co_tourism.service;
 import com.qualitypaper.co_tourism.model.tokens.TokenType;
 import com.qualitypaper.co_tourism.model.tokens.authenticationToken.AuthenticationToken;
 import com.qualitypaper.co_tourism.model.tokens.confirmationToken.ConfirmationToken;
+import com.qualitypaper.co_tourism.model.tokens.forgotPassword.ForgotPassword;
 import com.qualitypaper.co_tourism.model.user.User;
 import com.qualitypaper.co_tourism.repository.AuthenticationTokenRepository;
 import com.qualitypaper.co_tourism.repository.ConfirmationTokenRepository;
+import com.qualitypaper.co_tourism.repository.ForgotPasswordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 @Service
@@ -18,6 +22,7 @@ public class TokensService {
 
     private final AuthenticationTokenRepository authenticationTokenRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ForgotPasswordRepository forgotPasswordRepository;
 
     void saveUserAuthenticationToken(User user, String jwtToken) {
         var token = AuthenticationToken.builder()
@@ -29,6 +34,16 @@ public class TokensService {
                 .created(LocalDateTime.now())
                 .build();
         authenticationTokenRepository.save(token);
+    }
+    void saveUserForgotPasswordToken(User user, String forgotPasswordToken) {
+        var token = ForgotPassword.builder()
+                .user(user)
+                .token(forgotPasswordToken)
+                .tokenType(TokenType.FORGOT_PASSWORD)
+                .expires(LocalDateTime.now().plusMinutes(15))
+                .created(LocalDateTime.now())
+                .build();
+        forgotPasswordRepository.save(token);
     }
 
     void saveUserConfirmationToken(User user, String confirmationToken) {
@@ -67,4 +82,14 @@ public class TokensService {
 
        return generatedString;
     }
+
+
+    public boolean checkConfirmationTokenExpiration(ConfirmationToken confirmationToken){
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expires = confirmationToken.getExpires();
+        Duration difference = Duration.between(now, expires);
+        return Math.abs(difference.toMinutes()) < 15;
+    }
+
+
 }

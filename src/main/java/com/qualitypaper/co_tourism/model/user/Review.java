@@ -15,8 +15,12 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int rating;
     private String content;
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "review_from")
+    private User reviewFrom;
+    @OneToOne
+    @JoinColumn(name = "review_to")
+    private User reviewTo;
 }
